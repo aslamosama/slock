@@ -1,3 +1,4 @@
+#include "patches.h"
 /* user and group to drop privileges to */
 static const char *user  = "nobody";
 static const char *group = "nobody"; // use "nobody" for arch
