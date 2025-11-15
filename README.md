@@ -26,6 +26,8 @@ slock tool, how to install it and how it works.
 
 ### Changelog:
 
+2025-11-15 - Added the visual unlock patch
+
 2022-03-28 - Added the background image patch
 
 2021-09-13 - Added the dwm logo patch

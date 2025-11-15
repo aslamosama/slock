@@ -137,7 +137,12 @@ static const int controlkeyclear = 0;
 
 #if DPMS_PATCH
 /* time in seconds before the monitor shuts down */
-static const int monitortime = 5;
+static int monitortime = 5;
+
+#if VISUAL_UNLOCK_PATCH
+/* time in seconds before the monitor shuts down, if visual_unlock is enabled */
+static const int monitortime_vu = 0;
+#endif // VISUAL_UNLOCK_PATCH
 #endif // DPMS_PATCH
 
 #if KEYPRESS_FEEDBACK_PATCH

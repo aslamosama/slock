@@ -60,6 +60,10 @@ int runflag = 0;
 static time_t locktime;
 #endif // QUICKCANCEL_PATCH
 
+#if VISUAL_UNLOCK_PATCH
+int visual_unlock = 0;
+#endif // VISUAL_UNLOCK_PATCH
+
 enum {
 	#if DWM_LOGO_PATCH && !BLUR_PIXELATED_SCREEN_PATCH
 	BACKGROUND,
@@ -587,7 +591,12 @@ lockscreen(Display *dpy, struct xrandr *rr, int screen)
 		/* input is grabbed: we can lock the screen */
 		if (ptgrab == GrabSuccess && kbgrab == GrabSuccess) {
 			#if !UNLOCKSCREEN_PATCH
+			#if VISUAL_UNLOCK_PATCH
+			if (!visual_unlock)
+				XMapRaised(dpy, lock->win);
+			#else
 			XMapRaised(dpy, lock->win);
+			#endif // VISUAL_UNLOCK_PATCH
 			#endif // UNLOCKSCREEN_PATCH
 			if (rr->active)
 				XRRSelectInput(dpy, lock->win, RRScreenChangeNotifyMask);
@@ -670,6 +679,11 @@ main(int argc, char **argv) {
 		}
 		return 0;
 	#endif // MESSAGE_PATCH | COLOR_MESSAGE_PATCH
+	#if VISUAL_UNLOCK_PATCH
+	case 'u':
+		visual_unlock = 1;
+		break;
+	#endif // VISUAL_UNLOCK_PATCH
 	default:
 		usage();
 	} ARGEND
@@ -749,6 +763,11 @@ main(int argc, char **argv) {
 
 	#if DPMS_PATCH
 	/* DPMS magic to disable the monitor */
+	#if VISUAL_UNLOCK_PATCH
+	if (visual_unlock)
+		monitortime = monitortime_vu;
+	#endif // VISUAL_UNLOCK_PATCH
+
 	if (!DPMSCapable(dpy))
 		die("slock: DPMSCapable failed\n");
 	if (!DPMSEnable(dpy))
